@@ -9,7 +9,7 @@ The API is designed to be easy to use and facilitate portability to another plat
 
 Required
 --------
-* A Pi2go Lite robot, available here http://4tronix.co.uk/store/index.php?rt=product/product&product_id=400
+* A Pi2go Lite robot, available [here](http://4tronix.co.uk/store/index.php?rt=product/product&product_id=400).
 * A Raspberry Pi 2 with Raspbian or any linux with mono installed on it (http://www.mono-project.com/).
 
 A ready to use sd card will be available soon.
