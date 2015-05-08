@@ -10,9 +10,17 @@ The API is designed to be easy to use and facilitate portability to another plat
 Required
 --------
 * A Pi2go Lite robot, available [here](http://4tronix.co.uk/store/index.php?rt=product/product&product_id=400).
-* A Raspberry Pi 2 with Raspbian or any linux with mono installed on it (http://www.mono-project.com/).
+* A Raspberry Pi 2 with [Raspbian](http://www.raspbian.org/) or any linux with mono installed on it (http://www.mono-project.com/).
 
 A ready to use sd card image will be available soon.
+
+Optional
+--------
+* The API is able to control servos of the [Pan & Tilt](http://4tronix.co.uk/store/index.php?rt=product/product&product_id=403) kit for the Pi2Go Lite.
+
+Get started
+-----------
+TODO
 
 Licence
 -------
