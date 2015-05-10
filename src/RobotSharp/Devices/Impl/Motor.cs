@@ -1,19 +1,11 @@
 ﻿using RobotSharp.Gpio;
-using RobotSharp.Tools;
 
 namespace RobotSharp.Devices.Impl
 {
     public class Motor : IMotor
     {
-        public IOperatingSystemService OperatingSystemService { get; set; }
-        public IGpioController GpioController { get; set; }
-
-        private IChannel channelA;
-        private IChannel channelB;
-
-        private ChannelPwm pwmChannelA;
-        private ChannelPwm pwmChannelB;
-
+        public IGpioPort GpioPort { get; set; }
+        
         private int pinA;
         private int pinB;
 
@@ -25,41 +17,32 @@ namespace RobotSharp.Devices.Impl
 
         public void Setup()
         {
-            channelA = GpioController.GetChannel(pinA);
-            channelA.ChangeDirection(Direction.Output);
-            pwmChannelA = new ChannelPwm(OperatingSystemService, channelA);
-            pwmChannelA.ChangeDutyCycle(0);
-            pwmChannelA.ChangeFrequency(20);
-            pwmChannelA.Start();
+            GpioPort.Setup(pinA, Direction.Output, PullUpDown.Off);
+            GpioPort.StartPwm(pinA);
+            GpioPort.ControlPwm(pinA, 20, 0);
 
-            channelB = GpioController.GetChannel(pinB);
-            channelB.ChangeDirection(Direction.Output);
-            pwmChannelB = new ChannelPwm(OperatingSystemService, channelB);
-            pwmChannelB.ChangeDutyCycle(0);
-            pwmChannelB.ChangeFrequency(20);
-            pwmChannelB.Start();
+            GpioPort.Setup(pinB, Direction.Output, PullUpDown.Off);
+            GpioPort.StartPwm(pinB);
+            GpioPort.ControlPwm(pinB, 20, 0);
         }
 
         public void Forward(float speed)
         {
-            pwmChannelA.ChangeDutyCycle(speed);
-            pwmChannelA.ChangeFrequency(speed + 5);
-
-            pwmChannelB.ChangeDutyCycle(0);
+            GpioPort.ControlPwm(pinA, speed + 5, speed);
+            GpioPort.ControlPwm(pinB, null, 0);
         }
 
         public void Reverse(float speed)
         {
-            pwmChannelA.ChangeDutyCycle(0);
+            GpioPort.ControlPwm(pinA, null, 0);
 
-            pwmChannelB.ChangeDutyCycle(speed);
-            pwmChannelB.ChangeFrequency(speed + 5);
+            GpioPort.ControlPwm(pinB, speed + 5, speed);
         }
 
         public void Stop()
         {
-            pwmChannelA.ChangeDutyCycle(0);
-            pwmChannelB.ChangeDutyCycle(0);
+            GpioPort.ControlPwm(pinA, null, 0);
+            GpioPort.ControlPwm(pinB, null, 0);
         }
 
         public void Dispose()
@@ -67,8 +50,8 @@ namespace RobotSharp.Devices.Impl
             Stop();
 
             // stop pwm on each motor
-            pwmChannelA.Stop();
-            pwmChannelB.Stop();
+            GpioPort.StopPwm(pinA);
+            GpioPort.StopPwm(pinB);
         }
     }
 }

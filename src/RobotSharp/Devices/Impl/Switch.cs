@@ -4,10 +4,9 @@ namespace RobotSharp.Devices.Impl
 {
     public class Switch : ISwitch
     {
-        public IGpioController GpioController { get; set; }
+        public IGpioPort GpioPort { get; set; }
 
         private int pin;
-        private IChannel channel;
 
         public Switch(int pin)
         {
@@ -16,13 +15,12 @@ namespace RobotSharp.Devices.Impl
 
         public void Setup()
         {
-            channel = GpioController.GetChannel(pin);
-            channel.ChangeDirection(Direction.Input, PullUpDown.Up);
+            GpioPort.Setup(pin, Direction.Input, PullUpDown.Up);
         }
 
         public bool Value()
         {
-            return channel.Read() == HighLow.High;
+            return GpioPort.Input(pin) == HighLow.High;
         }
         
         public void Dispose()

@@ -4,9 +4,8 @@ namespace RobotSharp.Devices.Impl
 {
     public class InfraredSensor : IInfraredSensor
     {
-        public IGpioController GpioController { get; set; }
+        public IGpioPort GpioPort { get; set; }
 
-        private IChannel channel;
         private int pin;
 
         public InfraredSensor(int pin)
@@ -16,13 +15,12 @@ namespace RobotSharp.Devices.Impl
 
         public void Setup()
         {
-            channel = GpioController.GetChannel(pin);
-            channel.ChangeDirection(Direction.Input);
+            GpioPort.Setup(pin, Direction.Input, PullUpDown.Off);
         }
 
         public bool Value()
         {
-            return channel.Read() == HighLow.High;
+            return GpioPort.Input(pin) == HighLow.High;
         }
 
         public void Dispose()

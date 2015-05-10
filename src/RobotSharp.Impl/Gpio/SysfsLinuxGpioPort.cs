@@ -3,14 +3,16 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using RobotSharp.Gpio;
+using RobotSharp.Gpio.SoftwarePwm;
 using RobotSharp.Pi2Go.Tools;
 using RobotSharp.Tools;
 
-namespace RobotSharp.Pi2Go.LowLevel
+namespace RobotSharp.Pi2Go.Gpio
 {
     public class SysfsLinuxGpioPort : IGpioPort
     {
-        public IOperatingSystemService OperatingSystemService { get; set; }
+        private readonly IOperatingSystemService operatingSystemService;
+        private readonly SoftwarePwm softwarePwm;
 
         private StreamWriter exportWriter;
         private StreamWriter unexportWriter;
@@ -43,13 +45,17 @@ namespace RobotSharp.Pi2Go.LowLevel
         private static readonly string GpioPinDirectionPath = string.Concat(GpioBasePath, "/gpio{0}/direction");
         private static readonly string GpioPinValuePath = string.Concat(GpioBasePath, "/gpio{0}/value");
 
+        public SysfsLinuxGpioPort(IOperatingSystemService operatingSystemService)
+        {
+            this.operatingSystemService = operatingSystemService;
+            softwarePwm = new SoftwarePwm(operatingSystemService, this);
+        }
+
         private bool setup;
 
         public void Setup()
         {
             if (setup) return;
-
-            if (OperatingSystemService == null) throw new Exception("Operating system is mandatory");
 
             exportWriter =
                 new StreamWriter(new FileStream(GpioExportPath, FileMode.Open, FileAccess.Write),
@@ -61,7 +67,7 @@ namespace RobotSharp.Pi2Go.LowLevel
             setup = true;
         }
 
-        public void SetupGpio(int gpio, Direction direction, PullUpDown pullUpDown)
+        public void Setup(int gpio, Direction direction, PullUpDown pullUpDown)
         {
             Pin pin;
 
@@ -94,18 +100,28 @@ namespace RobotSharp.Pi2Go.LowLevel
             // TODO : and pull up down ?
         }
 
-        public void OutputGpio(int gpio, HighLow value)
+        public void Output(int gpio, HighLow value, long duration = -1)
         {
             var pin = pins[gpio];
             OutputGpio(pin, value);
         }
 
-        private void OutputGpio(Pin pin, HighLow value)
+        private void OutputGpio(Pin pin, HighLow value, long duration = -1)
         {
             PosixUtils.Echo(pin.ValueWriter, value == HighLow.High ? "1" : "0");
+
+            if (duration != -1)
+                operatingSystemService.NanoSleep(duration);
         }
 
-        public HighLow InputGpio(int gpio)
+        public void Output(IEnumerable<GpioPortOperation> operations)
+        {
+            if (operations == null) throw new ArgumentNullException("operations");
+            foreach (var operation in operations)
+                Output(operation.Pin, operation.Value, operation.Duration);
+        }
+
+        public HighLow Input(int gpio)
         {
             var pin = pins[gpio];
             var value = PosixUtils.Cat(pin.ValueReader);
@@ -173,6 +189,21 @@ namespace RobotSharp.Pi2Go.LowLevel
         {
             Dispose(true);
             GC.SuppressFinalize(this);
+        }
+
+        public void StartPwm(int gpio)
+        {
+            softwarePwm.StartPwm(gpio);
+        }
+
+        public void ControlPwm(int gpio, float? frequency, float? dutyCycle)
+        {
+            softwarePwm.ControlPwm(gpio, frequency, dutyCycle);
+        }
+
+        public void StopPwm(int gpio)
+        {
+            softwarePwm.StopPwm(gpio);
         }
     }
 }

@@ -1,12 +1,12 @@
 ﻿using System;
 using RobotSharp.Tools;
 
-namespace RobotSharp.Gpio
+namespace RobotSharp.Gpio.SoftwarePwm
 {
-    public class ChannelPwm
+    internal class SoftwareChannelPwm
     {
-        private readonly IOperatingSystemService operatingSystemService;
-        private readonly IChannel channel;
+        private readonly IGpioPort gpioPort;
+        private readonly int pin;
 
         private float frequency;
         private float dutyCycle;
@@ -17,10 +17,10 @@ namespace RobotSharp.Gpio
 
         private ILoopThread<object> loopThread;
 
-        public ChannelPwm(IOperatingSystemService operatingSystemService, IChannel channel)
+        public SoftwareChannelPwm(IOperatingSystemService operatingSystemService, IGpioPort gpioPort,int pin)
         {
-            this.operatingSystemService = operatingSystemService;
-            this.channel = channel;
+            this.gpioPort = gpioPort;
+            this.pin = pin;
 
             ChangeFrequency(1000.0f);
 
@@ -67,30 +67,27 @@ namespace RobotSharp.Gpio
             loopThread.Stop();
         }
 
+        private const int MillisecondsToNanoseconds = 1000000;
+
         private void UpdateDurations()
         {
             var sliceTime = 1000.0f / frequency / 100.0f; // in 0.01ms
 
             // calculate duration on seconds
-            durationHigh = Convert.ToInt32(dutyCycle * sliceTime);
+            durationHigh = Convert.ToInt64(dutyCycle*sliceTime)*MillisecondsToNanoseconds;
 
             // caculate duration off seconds
-            durationLow = Convert.ToInt32((100.0 - dutyCycle) * sliceTime);
+            durationLow = Convert.ToInt64((100.0 - dutyCycle)*sliceTime)*MillisecondsToNanoseconds;
         }
 
         private void Loop(object obj)
         {
             if (dutyCycle > 0.0f)
             {
-                channel.Write(HighLow.High);
-                // use Syscall.nanosleep ?
-                operatingSystemService.Sleep((int)durationHigh);
+                gpioPort.Output(pin, HighLow.High, durationHigh);
 
                 if (dutyCycle < 100.0f)
-                {
-                    channel.Write(HighLow.Low);
-                    operatingSystemService.Sleep((int)durationLow);
-                }
+                    gpioPort.Output(pin, HighLow.Low, durationLow);
             }
         }
     }

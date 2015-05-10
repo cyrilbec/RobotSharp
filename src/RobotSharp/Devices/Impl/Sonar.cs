@@ -7,10 +7,9 @@ namespace RobotSharp.Devices.Impl
     public class Sonar : ISonar
     {
         public IOperatingSystemService OperatingSystemService { get; set; }
-        public IGpioController GpioController { get; set; }
+        public IGpioPort GpioPort { get; set; }
 
         private int pin;
-        private IChannel channel;
 
         public Sonar(int pin)
         {
@@ -19,7 +18,7 @@ namespace RobotSharp.Devices.Impl
 
         public void Setup()
         {
-            channel = GpioController.GetChannel(pin);
+            
         }
 
         public double Distance()
@@ -28,14 +27,14 @@ namespace RobotSharp.Devices.Impl
 
             var start = GetTime();
             var count = start;
-            channel.ChangeDirection(Direction.Input);
+            GpioPort.Setup(pin, Direction.Input, PullUpDown.Off);
 
-            while (channel.Read() == HighLow.Low && (GetTime() - count) < 1) { }
+            while (GpioPort.Input(pin) == HighLow.Low && (GetTime() - count) < 1) { }
             start = GetTime();
             count = start;
             var stop = count;
 
-            while (channel.Read() == HighLow.High & (GetTime() - count) < 1) { }
+            while (GpioPort.Input(pin) == HighLow.High & (GetTime() - count) < 1) { }
             stop = GetTime();
 
             // Calculate pulse length
@@ -48,17 +47,17 @@ namespace RobotSharp.Devices.Impl
 
         private void Echo()
         {
-            channel.ChangeDirection(Direction.Output);
-            channel.Write(HighLow.High);
+            GpioPort.Setup(pin, Direction.Output, PullUpDown.Off);
+            GpioPort.Output(pin, HighLow.High);
 
             OperatingSystemService.Sleep(1);
 
-            channel.Write(HighLow.Low);
+            GpioPort.Output(pin, HighLow.Low);
         }
 
         private double GetTime()
         {
-            return (DateTime.UtcNow - new DateTime(1970, 1, 1)).TotalMilliseconds / 1000;
+            return (DateTime.UtcNow - new DateTime(1970, 1, 1)).TotalMilliseconds/1000;
         }
 
         public void Dispose()

@@ -1,13 +1,19 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Threading;
 using Mono.Unix.Native;
 using RobotSharp.Gpio;
+using RobotSharp.Gpio.SoftwarePwm;
+using RobotSharp.Tools;
 
-namespace RobotSharp.Pi2Go.LowLevel
+namespace RobotSharp.Pi2Go.Gpio
 {
     public class DmaLinuxGpioPort : IGpioPort
     {
+        private readonly IOperatingSystemService operatingSystemService;
+        private readonly SoftwarePwm softwarePwm;
+
         private const int BCM2708_PERI_BASE_DEFAULT = 536870912; //0x2000000;
         private const int GPIO_BASE_OFFSET = 2097152; // = 0x20000;
         private const int PAGE_SIZE = 4 * 1024;
@@ -34,6 +40,12 @@ namespace RobotSharp.Pi2Go.LowLevel
         private int devMemFileDescriptor;
         private bool setup;
 
+        public DmaLinuxGpioPort(IOperatingSystemService operatingSystemService)
+        {
+            this.operatingSystemService = operatingSystemService;
+            softwarePwm = new SoftwarePwm(operatingSystemService, this);
+        }
+
         public void Setup()
         {
             if (setup) return;
@@ -56,7 +68,7 @@ namespace RobotSharp.Pi2Go.LowLevel
             setup = true;
         }
 
-        public unsafe void SetupGpio(int gpio, Direction direction, PullUpDown pullUpDown)
+        public unsafe void Setup(int gpio, Direction direction, PullUpDown pullUpDown)
         {
             var gpioMapPtr = (int*)gpioMap;
 
@@ -70,7 +82,7 @@ namespace RobotSharp.Pi2Go.LowLevel
                 *(gpioMapPtr + offset) = (*(gpioMapPtr + offset) & ~(7 << shift));
         }
 
-        public unsafe void OutputGpio(int gpio, HighLow value)
+        public unsafe void Output(int gpio, HighLow value, long duration = -1)
         {
             // calculate offset
             var offset =
@@ -83,9 +95,19 @@ namespace RobotSharp.Pi2Go.LowLevel
 
             // write value to memory at (base + offset)
             *(basePtr + offset) = 1 << (gpio % 32);
+
+            if (duration != -1)
+                operatingSystemService.NanoSleep(duration);
         }
 
-        public unsafe HighLow InputGpio(int gpio)
+        public void Output(IEnumerable<GpioPortOperation> operations)
+        {
+            if (operations == null) throw new ArgumentNullException("operations");
+            foreach (var operation in operations)
+                Output(operation.Pin, operation.Value, operation.Duration);
+        }
+
+        public unsafe HighLow Input(int gpio)
         {
             var basePtr = (int*)gpioMap;
             var offset = PINLEVEL_OFFSET + (gpio / 32);
@@ -188,6 +210,21 @@ namespace RobotSharp.Pi2Go.LowLevel
         {
             Dispose(true);
             GC.SuppressFinalize(this);
+        }
+
+        public void StartPwm(int gpio)
+        {
+            softwarePwm.StartPwm(gpio);
+        }
+
+        public void ControlPwm(int gpio, float? frequency, float? dutyCycle)
+        {
+            softwarePwm.ControlPwm(gpio, frequency, dutyCycle);
+        }
+
+        public void StopPwm(int gpio)
+        {
+            softwarePwm.StopPwm(gpio);
         }
     }
 }

@@ -46,9 +46,10 @@
     <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Gpio\BaseGpioPort.cs" />
     <Compile Include="GstreamerVideoStreaming.cs" />
-    <Compile Include="LowLevel\DmaLinuxGpioPort.cs" />
-    <Compile Include="LowLevel\SysfsLinuxGpioPort.cs" />
+    <Compile Include="Gpio\DmaLinuxGpioPort.cs" />
+    <Compile Include="Gpio\SysfsLinuxGpioPort.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tools\ClassicDotnetOperatingSystemService.cs" />
     <Compile Include="Tools\PosixUtils.cs" />

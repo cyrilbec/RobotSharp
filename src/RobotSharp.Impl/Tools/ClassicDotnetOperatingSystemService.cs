@@ -71,14 +71,29 @@ namespace RobotSharp.Pi2Go.Tools
             Syscall.nanosleep(ref durationTimespec, ref remTimespec);
         }
 
+        private bool disposed;
+
+        private void Dispose(bool disposing)
+        {
+            if (disposed) return;
+
+            if (disposing)
+                // dispose managed resources
+                DisposeAllLoopThreads();
+
+            // dispose unmanaged resources
+
+            disposed = true;
+        }
+
         public void Dispose()
         {
-            DisposeAllLoopThreads();
+            Dispose(true);
         }
 
         ~ClassicDotnetOperatingSystemService()
         {
-            Dispose();
+            Dispose(false);
         }
     }
 }

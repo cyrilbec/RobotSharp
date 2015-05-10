@@ -4,9 +4,8 @@ namespace RobotSharp.Devices.Impl
 {
     public class Led : ILed
     {
-        public IGpioController GpioController { get; set; }
+        public IGpioPort GpioPort { get; set; }
 
-        private IChannel channel;
         private int pin;
 
         public Led(int pin)
@@ -16,13 +15,12 @@ namespace RobotSharp.Devices.Impl
 
         public void Setup()
         {
-            channel = GpioController.GetChannel(pin);
-            channel.ChangeDirection(Direction.Output);
+            GpioPort.Setup(pin, Direction.Output, PullUpDown.Off);
         }
 
         public void Set(bool on)
         {
-            channel.Write(on ? HighLow.High : HighLow.Low);
+            GpioPort.Output(pin, on ? HighLow.High : HighLow.Low);
         }
 
         public void Dispose()

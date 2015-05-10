@@ -47,12 +47,35 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Helpers\GpioHelper.cs" />
+    <Compile Include="Helpers\IPinOperation.cs" />
+    <Compile Include="Helpers\Pin.cs" />
+    <Compile Include="Helpers\PinOperations\PwmPinOperation.cs" />
+    <Compile Include="Helpers\PinOperations\ReadInputPinOperation.cs" />
+    <Compile Include="Helpers\PinOperations\ServoPinOperation.cs" />
+    <Compile Include="Helpers\PinOperations\WriteOutputPinOperation.cs" />
+    <Compile Include="Helpers\PinType.cs" />
+    <Compile Include="Modules\GpioModule.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Models\" />
+    <Folder Include="Views\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\src\RobotSharp.Impl\RobotSharp.Impl.csproj">
+      <Project>{2bf72db0-82d8-4aeb-b541-b76be09321e6}</Project>
+      <Name>RobotSharp.Impl</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\src\RobotSharp\RobotSharp.csproj">
+      <Project>{dce6f589-9f24-4bc3-9e3c-6b6629de383b}</Project>
+      <Name>RobotSharp</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

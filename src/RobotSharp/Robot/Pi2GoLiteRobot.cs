@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using RobotSharp.Devices;
 using RobotSharp.Devices.Camera;
+using RobotSharp.Gpio;
 using RobotSharp.Tools;
 
 namespace RobotSharp.Robot
 {
     public class Pi2GoLiteRobot : ISetupable, IDisposable
     {
-        public IGpioController GpioController { get; set; }
+        public IGpioPort GpioPort { get; set; }
 
         public IMotor MotorLeft { get; set; }
         public IMotor MotorRight { get; set; }
@@ -48,7 +49,7 @@ namespace RobotSharp.Robot
         {
             if (setup) return;
 
-            GpioController.Setup();
+            GpioPort.Setup();
 
             allPeripherals = new object[]
             {

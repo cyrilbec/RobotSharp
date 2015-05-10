@@ -1,6 +1,6 @@
 ﻿using System;
 using RobotSharp.Gpio;
-using RobotSharp.Pi2Go.LowLevel;
+using RobotSharp.Pi2Go.Gpio;
 using RobotSharp.Pi2Go.Tools;
 using RobotSharp.Robot;
 using RobotSharp.Tools;
@@ -17,8 +17,8 @@ namespace ManualControlSample
             {
                 IOperatingSystemService operatingSystemService = new ClassicDotnetOperatingSystemService();
                 IGpioPort gpioPort = 
-                    new DmaLinuxGpioPort();
-                    //new SysfsLinuxGpioPort() {OperatingSystemService = operatingSystemService};
+                    new DmaLinuxGpioPort(operatingSystemService);
+                    //new SysfsLinuxGpioPort(operatingSystemService);
 
                 robot = RobotBuilder.BuildPi2GoLite(operatingSystemService, gpioPort);
 

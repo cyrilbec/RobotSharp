@@ -1,6 +1,5 @@
 ﻿using RobotSharp.Devices.Impl;
 using RobotSharp.Gpio;
-using RobotSharp.Gpio.Impl;
 using RobotSharp.Tools;
 
 namespace RobotSharp.Robot
@@ -9,29 +8,27 @@ namespace RobotSharp.Robot
     {
         public static Pi2GoLiteRobot BuildPi2GoLite(IOperatingSystemService operatingSystemService, IGpioPort gpioPort)
         {
-            IGpioController gpioController = new GpioController() { GpioPort = gpioPort };
-
             return new Pi2GoLiteRobot()
             {
-                GpioController = gpioController,
+                GpioPort = gpioPort,
 
-                MotorLeft = new Motor(26, 24) { GpioController = gpioController, OperatingSystemService = operatingSystemService },
-                MotorRight = new Motor(19, 21) { GpioController = gpioController, OperatingSystemService = operatingSystemService },
+                MotorLeft = new Motor(7, 8) { GpioPort = gpioPort },
+                MotorRight = new Motor(10, 9) { GpioPort = gpioPort },
 
-                LedFront = new Led(15) { GpioController = gpioController },
-                LedRear = new Led(16) { GpioController = gpioController },
+                LedFront = new Led(22) { GpioPort = gpioPort },
+                LedRear = new Led(23) { GpioPort = gpioPort },
 
-                IrLeft = new InfraredSensor(7) { GpioController = gpioController },
-                IrRight = new InfraredSensor(11) { GpioController = gpioController },
-                IrLeftLine = new InfraredSensor(12) { GpioController = gpioController },
-                IrRightLine = new InfraredSensor(13) { GpioController = gpioController },
+                IrLeft = new InfraredSensor(4) { GpioPort = gpioPort },
+                IrRight = new InfraredSensor(17) { GpioPort = gpioPort },
+                IrLeftLine = new InfraredSensor(18) { GpioPort = gpioPort },
+                IrRightLine = new InfraredSensor(27) { GpioPort = gpioPort },
 
-                Sonar = new Sonar(8) { GpioController = gpioController },
+                Sonar = new Sonar(14) { GpioPort = gpioPort },
 
-                Switch = new Switch(23) { GpioController = gpioController },
+                Switch = new Switch(11) { GpioPort = gpioPort },
 
-                ServoPan = new Servo(22) { GpioController = gpioController, OperatingSystemService = operatingSystemService },
-                ServoTilt = new Servo(18) { GpioController = gpioController, OperatingSystemService = operatingSystemService },
+                ServoPan = new Servo(25) { GpioPort = gpioPort, OperatingSystemService = operatingSystemService },
+                ServoTilt = new Servo(24) { GpioPort = gpioPort, OperatingSystemService = operatingSystemService },
 
                 VideoStreaming = null
             };
