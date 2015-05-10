@@ -27,8 +27,8 @@ namespace RobotSharp.Robot
 
                 Switch = new Switch(11) { GpioPort = gpioPort },
 
-                ServoPan = new Servo(25) { GpioPort = gpioPort, OperatingSystemService = operatingSystemService },
-                ServoTilt = new Servo(24) { GpioPort = gpioPort, OperatingSystemService = operatingSystemService },
+                ServoPan = new Servo(25) { GpioPort = gpioPort },
+                ServoTilt = new Servo(24) { GpioPort = gpioPort },
 
                 VideoStreaming = null
             };

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using System.Threading.Tasks;
 using RobotSharp.Gpio;
 using RobotSharp.Gpio.SoftwarePwm;
 using RobotSharp.Pi2Go.Tools;
@@ -67,43 +68,43 @@ namespace RobotSharp.Pi2Go.Gpio
             setup = true;
         }
 
-        public void Setup(int gpio, Direction direction, PullUpDown pullUpDown)
+        public void Setup(int pin, Direction direction, PullUpDown pullUpDown)
         {
-            Pin pin;
+            Pin pinObj;
 
-            if (pins.ContainsKey(gpio)) pin = pins[gpio];
+            if (pins.ContainsKey(pin)) pinObj = pins[pin];
             else
             {
-                pin = new Pin();
+                pinObj = new Pin();
 
                 // export pin
-                Export(gpio);
+                Export(pin);
 
                 // create direction streams
-                pin.DirectionStream = new FileStream(string.Format(GpioPinDirectionPath, gpio), FileMode.Open,
+                pinObj.DirectionStream = new FileStream(string.Format(GpioPinDirectionPath, pin), FileMode.Open,
                     FileAccess.ReadWrite, FileShare.ReadWrite);
-                pin.DirectionWriter = new StreamWriter(pin.DirectionStream, Encoding.ASCII);
-                pin.DirectionReader = new StreamReader(pin.DirectionStream, Encoding.ASCII);
+                pinObj.DirectionWriter = new StreamWriter(pinObj.DirectionStream, Encoding.ASCII);
+                pinObj.DirectionReader = new StreamReader(pinObj.DirectionStream, Encoding.ASCII);
 
                 // create value streams
-                pin.ValueStream = new FileStream(string.Format(GpioPinValuePath, gpio), FileMode.Open,
+                pinObj.ValueStream = new FileStream(string.Format(GpioPinValuePath, pin), FileMode.Open,
                     FileAccess.ReadWrite, FileShare.ReadWrite);
-                pin.ValueWriter = new StreamWriter(pin.ValueStream, Encoding.ASCII);
-                pin.ValueReader = new StreamReader(pin.ValueStream, Encoding.ASCII);
+                pinObj.ValueWriter = new StreamWriter(pinObj.ValueStream, Encoding.ASCII);
+                pinObj.ValueReader = new StreamReader(pinObj.ValueStream, Encoding.ASCII);
 
-                pins.Add(gpio, pin);
+                pins.Add(pin, pinObj);
             }
 
             // set pin direction
-            PosixUtils.Echo(pin.DirectionWriter, direction == Direction.Input ? "in" : "out");
+            PosixUtils.Echo(pinObj.DirectionWriter, direction == Direction.Input ? "in" : "out");
 
             // TODO : and pull up down ?
         }
 
-        public void Output(int gpio, HighLow value, long duration = -1)
+        public void Output(int pin, HighLow value, long duration = -1)
         {
-            var pin = pins[gpio];
-            OutputGpio(pin, value);
+            var pinObj = pins[pin];
+            OutputGpio(pinObj, value);
         }
 
         private void OutputGpio(Pin pin, HighLow value, long duration = -1)
@@ -121,31 +122,31 @@ namespace RobotSharp.Pi2Go.Gpio
                 Output(operation.Pin, operation.Value, operation.Duration);
         }
 
-        public HighLow Input(int gpio)
+        public HighLow Input(int pin)
         {
-            var pin = pins[gpio];
-            var value = PosixUtils.Cat(pin.ValueReader);
+            var pinObj = pins[pin];
+            var value = PosixUtils.Cat(pinObj.ValueReader);
 
             return value == "1" ? HighLow.High : HighLow.Low;
         }
 
-        private void Export(int gpio)
+        private void Export(int pin)
         {
-            if (IsExported(gpio)) return;
+            if (IsExported(pin)) return;
 
-            PosixUtils.Echo(exportWriter, gpio.ToString());
+            PosixUtils.Echo(exportWriter, pin.ToString());
         }
 
-        private void Unexport(int gpio)
+        private void Unexport(int pin)
         {
-            if (!IsExported(gpio)) return;
+            if (!IsExported(pin)) return;
 
-            PosixUtils.Echo(unexportWriter, gpio.ToString());
+            PosixUtils.Echo(unexportWriter, pin.ToString());
         }
 
-        private bool IsExported(int gpio)
+        private bool IsExported(int pin)
         {
-            var pinPath = string.Format(GpioPinPath, gpio);
+            var pinPath = string.Format(GpioPinPath, pin);
             return Directory.Exists(pinPath);
         }
 
@@ -191,19 +192,58 @@ namespace RobotSharp.Pi2Go.Gpio
             GC.SuppressFinalize(this);
         }
 
-        public void StartPwm(int gpio)
+        public void StartPwm(int pin)
         {
-            softwarePwm.StartPwm(gpio);
+            softwarePwm.StartPwm(pin);
         }
 
-        public void ControlPwm(int gpio, float? frequency, float? dutyCycle)
+        public void ControlPwm(int pin, float? frequency, float? dutyCycle)
         {
-            softwarePwm.ControlPwm(gpio, frequency, dutyCycle);
+            softwarePwm.ControlPwm(pin, frequency, dutyCycle);
         }
 
-        public void StopPwm(int gpio)
+        public void StopPwm(int pin)
         {
-            softwarePwm.StopPwm(gpio);
+            softwarePwm.StopPwm(pin);
         }
+
+        #region dummy async implementations
+
+        public async Task SetupAsync(int pin, Direction direction, PullUpDown pullUpDown)
+        {
+            Setup(pin, direction, pullUpDown);
+        }
+
+        public async Task OutputAsync(int pin, HighLow value, long duration = -1)
+        {
+            Output(pin, value, duration);
+        }
+
+        public async Task OutputAsync(IEnumerable<GpioPortOperation> operations)
+        {
+            Output(operations);
+        }
+
+        public async Task<HighLow> InputAsync(int pin)
+        {
+            return Input(pin);
+        }
+
+        public async Task StartPwmAsync(int pin)
+        {
+            StartPwm(pin);
+        }
+
+        public async Task ControlPwmAsync(int pin, float? frequency, float? dutyCycle)
+        {
+            ControlPwm(pin, frequency, dutyCycle);
+        }
+
+        public async Task StopPwmAsync(int pin)
+        {
+            StopPwm(pin);
+        }
+
+        #endregion
     }
 }

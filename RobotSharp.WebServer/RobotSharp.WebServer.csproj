@@ -65,7 +65,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Models\" />
-    <Folder Include="Views\" />
+    <Folder Include="Views\Gpio\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\src\RobotSharp.Impl\RobotSharp.Impl.csproj">

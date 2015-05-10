@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
 using System.IO;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace RobotSharp.Pi2Go.Tools
 {
@@ -39,6 +40,13 @@ namespace RobotSharp.Pi2Go.Tools
             streamWriter.Flush();
         }
 
+        public static async Task EchoAsync(StreamWriter streamWriter, string str)
+        {
+            streamWriter.BaseStream.Seek(0, SeekOrigin.Begin);
+            await streamWriter.WriteAsync(str + "\n");
+            await streamWriter.FlushAsync();
+        }
+
         private static StreamReader OpenFileForCat(string fileName)
         {
             return new StreamReader(new FileStream(fileName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite));
@@ -50,10 +58,22 @@ namespace RobotSharp.Pi2Go.Tools
                 return Cat(streamReader);
         }
 
+        public static async Task<string> CatFileAsync(string fileName)
+        {
+            using (var streamReader = OpenFileForCat(fileName))
+                return await CatAsync(streamReader);
+        }
+
         public static string Cat(StreamReader streamReader)
         {
             streamReader.BaseStream.Seek(0, SeekOrigin.Begin);
             return streamReader.ReadToEnd();
+        }
+
+        public static async Task<string> CatAsync(StreamReader streamReader)
+        {
+            streamReader.BaseStream.Seek(0, SeekOrigin.Begin);
+            return await streamReader.ReadToEndAsync();
         }
     }
 }

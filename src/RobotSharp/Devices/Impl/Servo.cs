@@ -1,18 +1,14 @@
 ﻿using RobotSharp.Gpio;
-using RobotSharp.Tools;
-
 namespace RobotSharp.Devices.Impl
 {
     public class Servo : IServo
     {
         // TODO : this class need to be more generic
 
-        public IOperatingSystemService OperatingSystemService { get; set; }
         public IGpioPort GpioPort { get; set; }
 
         private int pin;
         private int degrees = 0;
-        private ILoopThread<int> loopThread;
 
         private GpioPortOperation[] operations;
 
@@ -31,10 +27,6 @@ namespace RobotSharp.Devices.Impl
             operations = new[]
             {new GpioPortOperation(pin) {Value = HighLow.High}, new GpioPortOperation(pin) {Value = HighLow.Low}};
 
-            // start thread
-            loopThread = OperatingSystemService.CreateLoopThread<int>(DoMove);
-            loopThread.Start(true);
-
             setup = true;
         }
 
@@ -43,9 +35,7 @@ namespace RobotSharp.Devices.Impl
             if (this.degrees == degrees) return;
 
             this.degrees = degrees;
-
-            // send signal to thread
-            loopThread.Signal(degrees);
+            DoMove(degrees);
         }
         
         // frequency in 10 us
@@ -69,8 +59,6 @@ namespace RobotSharp.Devices.Impl
         public void Dispose()
         {
             if (!setup) return;
-
-            loopThread.Dispose();
 
             setup = false;
         }

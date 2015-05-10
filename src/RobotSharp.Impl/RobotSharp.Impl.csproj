@@ -46,7 +46,6 @@
     <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Gpio\BaseGpioPort.cs" />
     <Compile Include="GstreamerVideoStreaming.cs" />
     <Compile Include="Gpio\DmaLinuxGpioPort.cs" />
     <Compile Include="Gpio\SysfsLinuxGpioPort.cs" />

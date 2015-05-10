@@ -6,6 +6,7 @@ using Mono.Unix.Native;
 using RobotSharp.Gpio;
 using RobotSharp.Gpio.SoftwarePwm;
 using RobotSharp.Tools;
+using System.Threading.Tasks;
 
 namespace RobotSharp.Pi2Go.Gpio
 {
@@ -68,33 +69,33 @@ namespace RobotSharp.Pi2Go.Gpio
             setup = true;
         }
 
-        public unsafe void Setup(int gpio, Direction direction, PullUpDown pullUpDown)
+        public unsafe void Setup(int pin, Direction direction, PullUpDown pullUpDown)
         {
             var gpioMapPtr = (int*)gpioMap;
 
-            var offset = FSEL_OFFSET + (gpio / 10);
-            var shift = (gpio % 10) * 3;
+            var offset = FSEL_OFFSET + (pin / 10);
+            var shift = (pin % 10) * 3;
 
-            SetPullUpDown(gpioMapPtr, gpio, pullUpDown);
+            SetPullUpDown(gpioMapPtr, pin, pullUpDown);
             if (direction == Direction.Output)
                 *(gpioMapPtr + offset) = (*(gpioMapPtr + offset) & ~(7 << shift)) | (1 << shift);
             else
                 *(gpioMapPtr + offset) = (*(gpioMapPtr + offset) & ~(7 << shift));
         }
 
-        public unsafe void Output(int gpio, HighLow value, long duration = -1)
+        public unsafe void Output(int pin, HighLow value, long duration = -1)
         {
             // calculate offset
             var offset =
                 value == HighLow.High
-                    ? SET_OFFSET + (gpio / 32)
-                    : CLR_OFFSET + (gpio / 32);
+                    ? SET_OFFSET + (pin / 32)
+                    : CLR_OFFSET + (pin / 32);
 
             // get unsafe base map pointer
             var basePtr = (int*)gpioMap;
 
             // write value to memory at (base + offset)
-            *(basePtr + offset) = 1 << (gpio % 32);
+            *(basePtr + offset) = 1 << (pin % 32);
 
             if (duration != -1)
                 operatingSystemService.NanoSleep(duration);
@@ -107,22 +108,22 @@ namespace RobotSharp.Pi2Go.Gpio
                 Output(operation.Pin, operation.Value, operation.Duration);
         }
 
-        public unsafe HighLow Input(int gpio)
+        public unsafe HighLow Input(int pin)
         {
             var basePtr = (int*)gpioMap;
-            var offset = PINLEVEL_OFFSET + (gpio / 32);
-            var mask = (1 << gpio % 32);
+            var offset = PINLEVEL_OFFSET + (pin / 32);
+            var mask = (1 << pin % 32);
             var value = *(basePtr + offset) & mask;
 
             return value == HIGH ? HighLow.High : HighLow.Low;
         }
 
-        private unsafe int GetPinDirection(int gpio)
+        private unsafe int GetPinDirection(int pin)
         {
             var gpioMapPtr = (int*)gpioMap;
 
-            var offset = FSEL_OFFSET + (gpio / 10);
-            var shift = (gpio % 10) * 3;
+            var offset = FSEL_OFFSET + (pin / 10);
+            var shift = (pin % 10) * 3;
             var value = *(gpioMapPtr + offset);
 
             value >>= shift;
@@ -212,19 +213,58 @@ namespace RobotSharp.Pi2Go.Gpio
             GC.SuppressFinalize(this);
         }
 
-        public void StartPwm(int gpio)
+        public void StartPwm(int pin)
         {
-            softwarePwm.StartPwm(gpio);
+            softwarePwm.StartPwm(pin);
         }
 
-        public void ControlPwm(int gpio, float? frequency, float? dutyCycle)
+        public void ControlPwm(int pin, float? frequency, float? dutyCycle)
         {
-            softwarePwm.ControlPwm(gpio, frequency, dutyCycle);
+            softwarePwm.ControlPwm(pin, frequency, dutyCycle);
         }
 
-        public void StopPwm(int gpio)
+        public void StopPwm(int pin)
         {
-            softwarePwm.StopPwm(gpio);
+            softwarePwm.StopPwm(pin);
         }
+
+        #region dummy async implementations
+
+        public async Task SetupAsync(int pin, Direction direction, PullUpDown pullUpDown)
+        {
+            Setup(pin, direction, pullUpDown);
+        }
+
+        public async Task OutputAsync(int pin, HighLow value, long duration = -1)
+        {
+            Output(pin, value, duration);
+        }
+
+        public async Task OutputAsync(IEnumerable<GpioPortOperation> operations)
+        {
+            Output(operations);
+        }
+
+        public async Task<HighLow> InputAsync(int pin)
+        {
+            return Input(pin);
+        }
+
+        public async Task StartPwmAsync(int pin)
+        {
+            StartPwm(pin);
+        }
+
+        public async Task ControlPwmAsync(int pin, float? frequency, float? dutyCycle)
+        {
+            ControlPwm(pin, frequency, dutyCycle);
+        }
+
+        public async Task StopPwmAsync(int pin)
+        {
+            StopPwm(pin);
+        }
+
+        #endregion
     }
 }
