@@ -68,11 +68,11 @@
     <Folder Include="Views\Gpio\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\src\RobotSharp.Impl\RobotSharp.Impl.csproj">
+    <ProjectReference Include="..\..\src\RobotSharp.Impl\RobotSharp.Impl.csproj">
       <Project>{2bf72db0-82d8-4aeb-b541-b76be09321e6}</Project>
       <Name>RobotSharp.Impl</Name>
     </ProjectReference>
-    <ProjectReference Include="..\src\RobotSharp\RobotSharp.csproj">
+    <ProjectReference Include="..\..\src\RobotSharp\RobotSharp.csproj">
       <Project>{dce6f589-9f24-4bc3-9e3c-6b6629de383b}</Project>
       <Name>RobotSharp</Name>
     </ProjectReference>
