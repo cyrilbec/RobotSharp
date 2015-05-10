@@ -19,7 +19,7 @@ namespace RobotSharp.Gpio
 
         HighLow Input(int pin);
         Task<HighLow> InputAsync(int pin);
-
+        
         // pwm
         void StartPwm(int pin);
         Task StartPwmAsync(int pin);

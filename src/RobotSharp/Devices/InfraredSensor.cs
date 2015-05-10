@@ -1,8 +1,8 @@
 ﻿using RobotSharp.Gpio;
 
-namespace RobotSharp.Devices.Impl
+namespace RobotSharp.Devices
 {
-    public class InfraredSensor : IInfraredSensor
+    public class InfraredSensor : IDevice
     {
         public IGpioPort GpioPort { get; set; }
 

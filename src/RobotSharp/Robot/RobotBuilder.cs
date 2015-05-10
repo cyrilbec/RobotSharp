@@ -1,4 +1,4 @@
-﻿using RobotSharp.Devices.Impl;
+﻿using RobotSharp.Devices;
 using RobotSharp.Gpio;
 using RobotSharp.Tools;
 
@@ -30,7 +30,7 @@ namespace RobotSharp.Robot
                 ServoPan = new Servo(25) { GpioPort = gpioPort },
                 ServoTilt = new Servo(24) { GpioPort = gpioPort },
 
-                VideoStreaming = null
+                //VideoStreaming = null
             };
         }
     }

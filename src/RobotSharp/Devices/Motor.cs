@@ -1,8 +1,8 @@
 ﻿using RobotSharp.Gpio;
 
-namespace RobotSharp.Devices.Impl
+namespace RobotSharp.Devices
 {
-    public class Motor : IMotor
+    public class Motor : IDevice
     {
         public IGpioPort GpioPort { get; set; }
         

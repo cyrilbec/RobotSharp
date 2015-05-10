@@ -1,7 +1,8 @@
 ﻿using RobotSharp.Gpio;
-namespace RobotSharp.Devices.Impl
+
+namespace RobotSharp.Devices
 {
-    public class Servo : IServo
+    public class Servo : IDevice
     {
         // TODO : this class need to be more generic
 

@@ -1,9 +1,8 @@
-﻿using RobotSharp.Devices.Camera;
-using RobotSharp.Pi2Go.Tools;
+﻿using RobotSharp.Pi2Go.Tools;
 
 namespace RobotSharp.Devices.Impl.Camera
 {
-    public class GstreamerVideoStreaming : IVideoStreaming
+    public class GstreamerVideoStreaming
     {
         private bool started;
 

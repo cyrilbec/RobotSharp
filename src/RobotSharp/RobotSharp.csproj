@@ -41,21 +41,15 @@
     <!-- A reference to the entire .NET Framework is automatically included -->
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Devices\Camera\IVideoStreaming.cs" />
-    <Compile Include="Devices\IInfraredSensor.cs" />
-    <Compile Include="Devices\ILed.cs" />
-    <Compile Include="Devices\IMotor.cs" />
-    <Compile Include="Devices\Impl\Camera\CameraServo.cs" />
-    <Compile Include="Devices\Impl\InfraredSensor.cs" />
-    <Compile Include="Devices\Impl\Led.cs" />
-    <Compile Include="Devices\Impl\Motor.cs" />
-    <Compile Include="Devices\Impl\Servo.cs" />
-    <Compile Include="Devices\Impl\Sonar.cs" />
-    <Compile Include="Devices\Impl\Switch.cs" />
-    <Compile Include="Devices\IServo.cs" />
-    <Compile Include="Devices\ISonar.cs" />
-    <Compile Include="Devices\ISwitch.cs" />
+    <Compile Include="Devices\IDevice.cs" />
+    <Compile Include="Devices\InfraredSensor.cs" />
+    <Compile Include="Devices\Led.cs" />
+    <Compile Include="Devices\Motor.cs" />
+    <Compile Include="Devices\Servo.cs" />
+    <Compile Include="Devices\Sonar.cs" />
+    <Compile Include="Devices\Switch.cs" />
     <Compile Include="Gpio\GpioPortOperation.cs" />
+    <Compile Include="Gpio\Pulse\Pulser.cs" />
     <Compile Include="Gpio\SoftwarePwm\PinSoftwarePwm.cs" />
     <Compile Include="Gpio\Direction.cs" />
     <Compile Include="Gpio\HighLow.cs" />

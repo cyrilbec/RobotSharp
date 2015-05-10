@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using RobotSharp.Devices;
-using RobotSharp.Devices.Camera;
 using RobotSharp.Gpio;
 using RobotSharp.Tools;
 
@@ -12,29 +11,29 @@ namespace RobotSharp.Robot
     {
         public IGpioPort GpioPort { get; set; }
 
-        public IMotor MotorLeft { get; set; }
-        public IMotor MotorRight { get; set; }
+        public Motor MotorLeft { get; set; }
+        public Motor MotorRight { get; set; }
 
         // LEDs
-        public ILed LedFront { get; set; }
-        public ILed LedRear { get; set; }
+        public Led LedFront { get; set; }
+        public Led LedRear { get; set; }
 
         // sonar
-        public ISonar Sonar { get; set; }
+        public Sonar Sonar { get; set; }
 
         // infrared sensor
-        public IInfraredSensor IrLeft { get; set; }
-        public IInfraredSensor IrRight { get; set; }
-        public IInfraredSensor IrLeftLine { get; set; }
-        public IInfraredSensor IrRightLine { get; set; }
+        public InfraredSensor IrLeft { get; set; }
+        public InfraredSensor IrRight { get; set; }
+        public InfraredSensor IrLeftLine { get; set; }
+        public InfraredSensor IrRightLine { get; set; }
 
         // switch
-        public ISwitch Switch { get; set; }
+        public Switch Switch { get; set; }
 
         // camera
-        public IServo ServoPan { get; set; }
-        public IServo ServoTilt { get; set; }
-        public IVideoStreaming VideoStreaming { get; set; }
+        public Servo ServoPan { get; set; }
+        public Servo ServoTilt { get; set; }
+        //public VideoStreaming VideoStreaming { get; set; }
 
         private object[] allPeripherals;
 
@@ -54,7 +53,7 @@ namespace RobotSharp.Robot
             allPeripherals = new object[]
             {
                 MotorLeft, MotorRight, LedFront, LedRear, Sonar, IrLeft, IrRight, IrLeftLine, IrRightLine, Switch,
-                ServoPan, ServoTilt, VideoStreaming
+                ServoPan, ServoTilt//, VideoStreaming
             };
 
             // setup all peripherals

@@ -2,9 +2,9 @@
 using RobotSharp.Gpio;
 using RobotSharp.Tools;
 
-namespace RobotSharp.Devices.Impl
+namespace RobotSharp.Devices
 {
-    public class Sonar : ISonar
+    public class Sonar : IDevice
     {
         public IOperatingSystemService OperatingSystemService { get; set; }
         public IGpioPort GpioPort { get; set; }

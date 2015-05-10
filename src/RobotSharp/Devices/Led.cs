@@ -1,8 +1,8 @@
 ﻿using RobotSharp.Gpio;
 
-namespace RobotSharp.Devices.Impl
+namespace RobotSharp.Devices
 {
-    public class Led : ILed
+    public class Led : IDevice
     {
         public IGpioPort GpioPort { get; set; }
 
