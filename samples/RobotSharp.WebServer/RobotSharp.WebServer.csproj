@@ -77,6 +77,12 @@
       <Name>RobotSharp</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\main.js" />
+    <Content Include="Views\pi2golite.js" />
+    <Content Include="Views\SocketTest.html" />
+    <Content Include="Views\ui.js" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
