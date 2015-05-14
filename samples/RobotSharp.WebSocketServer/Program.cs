@@ -14,7 +14,10 @@ namespace RobotSharp.WebSocketServer
             var gpioPort = new LogGpioPort(Console.Out);
             //var gpioPort = new DmaLinuxGpioPort(operatingSystemService);
 
+            // create robot
             var robot = RobotBuilder.BuildPi2GoLite(operatingSystemService, gpioPort);
+            robot.Setup();
+
             using (new Pi2GoWebSocketServer(robot, 81, Console.Out))
             {
                 Console.WriteLine("Press any key to quit.");

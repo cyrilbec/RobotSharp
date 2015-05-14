@@ -71,8 +71,11 @@ namespace RobotSharp.Robot
 
         public void Forward(float leftSpeed, float rightSpeed)
         {
-            MotorLeft.Forward(leftSpeed);
-            MotorRight.Forward(rightSpeed);
+            if (leftSpeed >= 0) MotorLeft.Forward(leftSpeed);
+            else MotorLeft.Reverse(Math.Abs(leftSpeed));
+
+            if(rightSpeed>=0) MotorRight.Forward(rightSpeed);
+            else MotorRight.Reverse(Math.Abs(rightSpeed));
         }
 
         public void Reverse(float speed)

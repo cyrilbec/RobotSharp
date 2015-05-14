@@ -66,7 +66,7 @@ namespace RobotSharp.WebSocket.Server
             else if (operation == Operation.CameraMove)
             {
                 var movement = (CameraMovement)bytes[1];
-                var degrees = (int)(sbyte)bytes[2];
+                var degrees = Convert.ToInt32((sbyte) bytes[2]);
 
                 if (movement == CameraMovement.Pan) robot.CameraChangePanPosition(degrees);
                 else robot.CameraChangeTiltPosition(degrees);

@@ -16,16 +16,11 @@ namespace ManualControlSample
         {
             try
             {
-                //IOperatingSystemService operatingSystemService = new ClassicDotnetOperatingSystemService();
-                //IGpioPort gpioPort = 
-                //    new DmaLinuxGpioPort(operatingSystemService);
-                    //new SysfsLinuxGpioPort(operatingSystemService);
-
                 // direct control
-                //robot = RobotBuilder.BuildPi2GoLite(operatingSystemService, gpioPort);
+                //robot = BuildLocalRobot();
 
                 // remote control via web socket
-                robot = new WebSocketClientPi2GoLiteRobot("ws://localhost:81/pi2golite");
+                robot = BuildRemoteRobot();
 
                 robot.Setup();
 
@@ -40,8 +35,24 @@ namespace ManualControlSample
             Console.WriteLine("done.");
         }
 
+        private static IPi2GoLiteRobot BuildLocalRobot()
+        {
+            IOperatingSystemService operatingSystemService = new ClassicDotnetOperatingSystemService();
+            IGpioPort gpioPort =
+                new DmaLinuxGpioPort(operatingSystemService);
+            //new SysfsLinuxGpioPort(operatingSystemService);
+
+            return RobotBuilder.BuildPi2GoLite(operatingSystemService, gpioPort);
+        }
+
+        private static IPi2GoLiteRobot BuildRemoteRobot()
+        {
+            return new WebSocketClientPi2GoLiteRobot("ws://localhost:81/pi2golite");
+        }
+
         static void ManualControl()
         {
+            const int speedStep = 10;
             int speed = 80;
 
             const int cameraStep = 5;
@@ -63,6 +74,18 @@ namespace ManualControlSample
             ConsoleKeyInfo key;
             while ((key = Console.ReadKey(true)).Key != ConsoleKey.Q)
             {
+                // speed control
+                if (key.Key == ConsoleKey.H && speed < 100)
+                {
+                    speed += speedStep;
+                    Console.WriteLine("speed is now at {0}%", speed);
+                }
+                if (key.Key == ConsoleKey.N && speed > 0)
+                {
+                    speed -= speedStep;
+                    Console.WriteLine("speed is now at {0}%", speed);
+                }
+
                 var hasShift = (key.Modifiers & ConsoleModifiers.Shift) != 0;
 
                 // if shift is not pressed, control wheel
@@ -102,25 +125,25 @@ namespace ManualControlSample
                 {
                     Console.WriteLine("shift  + " + key.Key);
                     // if shift move camera
-                    if (key.Key == ConsoleKey.A)
+                    if (key.Key == ConsoleKey.A || key.Key == ConsoleKey.UpArrow)
                     {
                         cameraTiltPosition += cameraStep;
                         robot.CameraChangeTiltPosition(cameraTiltPosition);
                         Console.WriteLine("camera up");
                     }
-                    if (key.Key == ConsoleKey.B)
+                    if (key.Key == ConsoleKey.B || key.Key == ConsoleKey.DownArrow)
                     {
                         cameraTiltPosition -= cameraStep;
                         robot.CameraChangeTiltPosition(cameraTiltPosition);
                         Console.WriteLine("camera down");
                     }
-                    if (key.Key == ConsoleKey.C)
+                    if (key.Key == ConsoleKey.C || key.Key == ConsoleKey.RightArrow)
                     {
                         cameraPanPosition += cameraStep;
                         robot.CameraChangePanPosition(cameraPanPosition);
                         Console.WriteLine("camera right");
                     }
-                    if (key.Key == ConsoleKey.D)
+                    if (key.Key == ConsoleKey.D || key.Key == ConsoleKey.LeftArrow)
                     {
                         cameraPanPosition -= cameraStep;
                         robot.CameraChangePanPosition(cameraPanPosition);
@@ -128,16 +151,7 @@ namespace ManualControlSample
                     }
                 }
 
-                if (key.Key == ConsoleKey.Add && speed < 100)
-                {
-                    speed += 10;
-                    Console.WriteLine("speed is now at {0}%", speed);
-                }
-                if (key.Key == ConsoleKey.Subtract && speed > 0)
-                {
-                    speed -= 10;
-                    Console.WriteLine("speed is now at {0}%", speed);
-                }
+                
                 if (key.Key == ConsoleKey.F)
                 {
                     ledFront = !ledFront;
