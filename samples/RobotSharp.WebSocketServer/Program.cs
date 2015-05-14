@@ -20,6 +20,7 @@ namespace RobotSharp.WebSocketServer
 
             using (new Pi2GoWebSocketServer(robot, 81, Console.Out))
             {
+                Console.WriteLine("Server started");
                 Console.WriteLine("Press any key to quit.");
                 Console.ReadKey(true);
             }
