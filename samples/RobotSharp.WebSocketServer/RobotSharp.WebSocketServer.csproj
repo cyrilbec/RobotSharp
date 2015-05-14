@@ -46,11 +46,24 @@
   <ItemGroup>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="WebSocketMessageReceiver.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\RobotSharp.Impl\RobotSharp.Impl.csproj">
+      <Project>{2bf72db0-82d8-4aeb-b541-b76be09321e6}</Project>
+      <Name>RobotSharp.Impl</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\src\RobotSharp\RobotSharp.csproj">
+      <Project>{dce6f589-9f24-4bc3-9e3c-6b6629de383b}</Project>
+      <Name>RobotSharp</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\RobotSharp.WebSocket\RobotSharp.WebSocket.csproj">
+      <Project>{709e6988-6d31-4126-a93e-fa888d6082ff}</Project>
+      <Name>RobotSharp.WebSocket</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

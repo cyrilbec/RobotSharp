@@ -15,6 +15,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RobotSharp.WebSocketServer"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RobotSharp.WebServer", "samples\RobotSharp.WebServer\RobotSharp.WebServer.csproj", "{6674129C-A850-4300-8213-89740E98F6EA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RobotSharp.WebSocket", "samples\RobotSharp.WebSocket\RobotSharp.WebSocket.csproj", "{709E6988-6D31-4126-A93E-FA888D6082FF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -41,6 +43,10 @@ Global
 		{6674129C-A850-4300-8213-89740E98F6EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6674129C-A850-4300-8213-89740E98F6EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6674129C-A850-4300-8213-89740E98F6EA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{709E6988-6D31-4126-A93E-FA888D6082FF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{709E6988-6D31-4126-A93E-FA888D6082FF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{709E6988-6D31-4126-A93E-FA888D6082FF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{709E6988-6D31-4126-A93E-FA888D6082FF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -49,5 +55,6 @@ Global
 		{C6D27695-110C-4EA9-BDE5-18D2128AB182} = {DE7ABA01-9022-4B7E-A91E-465FF4308F61}
 		{9280878A-A53A-42E9-9772-33286DFE53B4} = {DE7ABA01-9022-4B7E-A91E-465FF4308F61}
 		{6674129C-A850-4300-8213-89740E98F6EA} = {DE7ABA01-9022-4B7E-A91E-465FF4308F61}
+		{709E6988-6D31-4126-A93E-FA888D6082FF} = {DE7ABA01-9022-4B7E-A91E-465FF4308F61}
 	EndGlobalSection
 EndGlobal

@@ -7,7 +7,7 @@ using RobotSharp.Tools;
 
 namespace RobotSharp.Robot
 {
-    public class Pi2GoLiteRobot : ISetupable, IDisposable
+    public class Pi2GoLiteRobot : IPi2GoLiteRobot
     {
         public IGpioPort GpioPort { get; set; }
 

@@ -56,6 +56,7 @@
     <Compile Include="Gpio\PullUpDown.cs" />
     <Compile Include="Gpio\IGpioPort.cs" />
     <Compile Include="Gpio\SoftwarePwm\SoftwarePwm.cs" />
+    <Compile Include="Robot\IPi2GoLiteRobot.cs" />
     <Compile Include="Robot\Pi2GoLiteRobot.cs" />
     <Compile Include="Robot\RobotBuilder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

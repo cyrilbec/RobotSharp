@@ -4,23 +4,28 @@ using RobotSharp.Pi2Go.Gpio;
 using RobotSharp.Pi2Go.Tools;
 using RobotSharp.Robot;
 using RobotSharp.Tools;
+using RobotSharp.WebSocket.Client;
 
 namespace ManualControlSample
 {
     class Program
     {
-        private static Pi2GoLiteRobot robot;
+        private static IPi2GoLiteRobot robot;
 
         static void Main(string[] args)
         {
             try
             {
-                IOperatingSystemService operatingSystemService = new ClassicDotnetOperatingSystemService();
-                IGpioPort gpioPort = 
-                    new DmaLinuxGpioPort(operatingSystemService);
+                //IOperatingSystemService operatingSystemService = new ClassicDotnetOperatingSystemService();
+                //IGpioPort gpioPort = 
+                //    new DmaLinuxGpioPort(operatingSystemService);
                     //new SysfsLinuxGpioPort(operatingSystemService);
 
-                robot = RobotBuilder.BuildPi2GoLite(operatingSystemService, gpioPort);
+                // direct control
+                //robot = RobotBuilder.BuildPi2GoLite(operatingSystemService, gpioPort);
+
+                // remote control via web socket
+                robot = new WebSocketClientPi2GoLiteRobot("ws://localhost:81/pi2golite");
 
                 robot.Setup();
 
@@ -38,15 +43,20 @@ namespace ManualControlSample
         static void ManualControl()
         {
             int speed = 80;
+
+            const int cameraStep = 5;
+            int cameraPanPosition = 0;
+            int cameraTiltPosition = 0;
+
             Console.WriteLine("press q to quit.");
 
             // move camera to initial position
-            robot.CameraChangePanPosition(0);
-            robot.CameraChangeTiltPosition(0);
+            robot.CameraChangePanPosition(cameraPanPosition);
+            robot.CameraChangeTiltPosition(cameraTiltPosition);
 
             // light off
-            robot.LedFront.Set(false);
-            robot.LedRear.Set(false);
+            //robot.LedFront.Set(false);
+            //robot.LedRear.Set(false);
 
             bool ledFront = false, ledRear = false;
 
@@ -85,7 +95,7 @@ namespace ManualControlSample
                     }
                     if (key.Key == ConsoleKey.D)
                     {
-                        Console.WriteLine("distance = {0}cm", robot.Sonar.Distance());
+                        //Console.WriteLine("distance = {0}cm", robot.Sonar.Distance());
                     }
                 }
                 else
@@ -94,22 +104,26 @@ namespace ManualControlSample
                     // if shift move camera
                     if (key.Key == ConsoleKey.A)
                     {
-                        robot.CameraUp();
+                        cameraTiltPosition += cameraStep;
+                        robot.CameraChangeTiltPosition(cameraTiltPosition);
                         Console.WriteLine("camera up");
                     }
                     if (key.Key == ConsoleKey.B)
                     {
-                        robot.CameraDown();
+                        cameraTiltPosition -= cameraStep;
+                        robot.CameraChangeTiltPosition(cameraTiltPosition);
                         Console.WriteLine("camera down");
                     }
                     if (key.Key == ConsoleKey.C)
                     {
-                        robot.CameraRight();
+                        cameraPanPosition += cameraStep;
+                        robot.CameraChangePanPosition(cameraPanPosition);
                         Console.WriteLine("camera right");
                     }
                     if (key.Key == ConsoleKey.D)
                     {
-                        robot.CameraLeft();
+                        cameraPanPosition -= cameraStep;
+                        robot.CameraChangePanPosition(cameraPanPosition);
                         Console.WriteLine("camera left");
                     }
                 }
@@ -127,12 +141,12 @@ namespace ManualControlSample
                 if (key.Key == ConsoleKey.F)
                 {
                     ledFront = !ledFront;
-                    robot.LedFront.Set(ledFront);
+                    //robot.LedFront.Set(ledFront);
                 }
                 if (key.Key == ConsoleKey.R)
                 {
                     ledRear = !ledRear;
-                    robot.LedRear.Set(ledRear);
+                    //robot.LedRear.Set(ledRear);
                 }
             }
         }
