@@ -11,8 +11,8 @@ namespace RobotSharp.WebSocketServer
         static void Main(string[] args)
         {
             var operatingSystemService = new ClassicDotnetOperatingSystemService();
-            var gpioPort = new LogGpioPort(Console.Out);
-            //var gpioPort = new DmaLinuxGpioPort(operatingSystemService);
+            //var gpioPort = new LogGpioPort(Console.Out);
+            var gpioPort = new DmaLinuxGpioPort(operatingSystemService);
 
             // create robot
             var robot = RobotBuilder.BuildPi2GoLite(operatingSystemService, gpioPort);

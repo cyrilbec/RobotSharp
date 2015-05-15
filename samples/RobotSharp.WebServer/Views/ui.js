@@ -24,6 +24,11 @@ var ui = (function() {
             e.preventDefault();
             robot.spinRight(speed);
         });
+
+        $('.move.stop').on('click', function (e) {
+            e.preventDefault();
+            robot.stop();
+        });
     }
 
     return {

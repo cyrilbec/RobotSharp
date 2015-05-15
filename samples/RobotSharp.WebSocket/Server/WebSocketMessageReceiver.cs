@@ -56,10 +56,22 @@ namespace RobotSharp.WebSocket.Server
             var bytes = e.RawData;
             var operation = (Operation)bytes[0];
 
+            if (operation == Operation.Ping) return;
+
             if (operation == Operation.Move)
             {
-                var leftSpeed = Convert.ToSingle((sbyte)bytes[1]);
-                var rightSpeed = Convert.ToSingle((sbyte)bytes[2]);
+                var leftSpeedByte = bytes[1];
+                var rightSpeedByte = bytes[2];
+
+                if (leftSpeedByte == 0 && rightSpeedByte == 0)
+                {
+                    robot.Stop();
+                    base.OnMessage(e);
+                    return;
+                }
+
+                var leftSpeed = Convert.ToSingle((sbyte)leftSpeedByte);
+                var rightSpeed = Convert.ToSingle((sbyte)rightSpeedByte);
 
                 robot.Forward(leftSpeed, rightSpeed);
             }
