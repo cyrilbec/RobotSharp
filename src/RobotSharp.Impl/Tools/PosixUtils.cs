@@ -16,10 +16,17 @@ namespace RobotSharp.Pi2Go.Tools
 
         public static Process CreateBashCommandProcess(string cmd)
         {
-            var processStartInfo = new ProcessStartInfo { FileName = "/bin/bash", Arguments = "-c \"" + cmd + "\"" };
-            var process = new Process() { StartInfo = processStartInfo };
+            var processStartInfo = new ProcessStartInfo
+            {
+                FileName = "/bin/bash",
+                Arguments = "-c \"" + cmd + "\"",
 
-            return process;
+                UseShellExecute = false,
+                RedirectStandardOutput = true,
+                RedirectStandardError = true,
+                RedirectStandardInput = true
+            };
+            return new Process() { StartInfo = processStartInfo };
         }
 
         public static void EchoToFile(string fileName, string str)
