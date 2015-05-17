@@ -32,7 +32,7 @@ var robot = (function () {
 
     function initWebSocket() {
 
-        var url = 'ws://' + options.host + ':' + options.port + '/pi2golite';
+        var url = 'ws://' + options.host + ':' + options.port + '/control';
         log('connecting to ' + url);
 
         webSocket = new WebSocket(url);
@@ -81,7 +81,7 @@ var robot = (function () {
         var bytes = new Uint8Array(3);
         bytes[0] = operations.cameraMove; // operation type
         bytes[1] = servo; // pan or tilt
-        bytes[1] = degrees; // position in degrees
+        bytes[2] = degrees; // position in degrees
         webSocket.send(bytes.buffer);
     }
 

@@ -1,6 +1,6 @@
 ﻿using System.IO;
 
-namespace RobotSharp.Images
+namespace RobotSharp.Camera
 {
     public class FrameAvalaibleEventArgs
     {

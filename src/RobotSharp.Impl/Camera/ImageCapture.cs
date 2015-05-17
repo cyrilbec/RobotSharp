@@ -4,14 +4,11 @@ using System.IO;
 using System.Threading;
 using RobotSharp.Pi2Go.Tools;
 
-namespace RobotSharp.Images
+namespace RobotSharp.Camera
 {
-    public class ImageCapture
+    public class ImageCapture : IImageCapture
     {
-        public delegate void FrameAvailableEventHandler(object sender, FrameAvalaibleEventArgs e);
-
         public event FrameAvailableEventHandler FrameAvailable;
-
         // TODO : add event "no more frame"
 
         private int frameCount = 0;
@@ -68,8 +65,10 @@ namespace RobotSharp.Images
             // raspistill -n -e jpg -w 640 -h 480 -q 75 -x none -tl 0 -t 10000 -o - | mono RobotSharp.ImageCapture.exe
             //return Console.OpenStandardInput();
 
+            PosixUtils.ExecuteKillAll("raspistill");
+
             // start a process and get his stdout's
-            imageGeneratorProcess = PosixUtils.CreateBashCommandProcess("raspistill -n -e jpg -w 640 -h 480 -q 75 -x none -tl 0 -t 10000 -o -");
+            imageGeneratorProcess = PosixUtils.CreateBashCommandProcess("raspistill -n -e jpg -w 640 -h 480 -q 75 -x none -tl 0 -o -");
             imageGeneratorProcess.Start();
             return imageGeneratorProcess.StandardOutput.BaseStream;
         }

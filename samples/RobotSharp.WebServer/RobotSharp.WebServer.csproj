@@ -65,7 +65,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Models\" />
-    <Folder Include="Views\Gpio\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\src\RobotSharp.Impl\RobotSharp.Impl.csproj">
@@ -78,6 +77,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Views\camera.js" />
     <Content Include="Views\main.js" />
     <Content Include="Views\pi2golite.js" />
     <Content Include="Views\SocketTest.html" />

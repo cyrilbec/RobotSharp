@@ -11,6 +11,7 @@ namespace RobotSharp.Pi2Go.Tools
         {
             var process = CreateBashCommandProcess("killall " + processName);
             process.Start();
+            process.WaitForExit();
             process.Close();
         }
 

@@ -8,13 +8,13 @@ using ErrorEventArgs = WebSocketSharp.ErrorEventArgs;
 
 namespace RobotSharp.WebSocket.Server
 {
-    internal class WebSocketMessageReceiver : WebSocketBehavior
+    internal class WebSocketOperationMessageReceiver : WebSocketBehavior
     {
         private IPi2GoLiteRobot robot;
         private Pi2GoLiteState state;
         private TextWriter traceWriter;
 
-        internal WebSocketMessageReceiver(IPi2GoLiteRobot robot, Pi2GoLiteState state)
+        internal WebSocketOperationMessageReceiver(IPi2GoLiteRobot robot, Pi2GoLiteState state)
         {
             this.robot = robot;
             this.state = state;

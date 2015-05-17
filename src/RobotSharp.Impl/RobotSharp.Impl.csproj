@@ -50,8 +50,7 @@
     <Compile Include="GstreamerVideoStreaming.cs" />
     <Compile Include="Gpio\DmaLinuxGpioPort.cs" />
     <Compile Include="Gpio\SysfsLinuxGpioPort.cs" />
-    <Compile Include="Images\FrameAvalaibleEventArgs.cs" />
-    <Compile Include="Images\ImageCapture.cs" />
+    <Compile Include="Camera\ImageCapture.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tools\ClassicDotnetOperatingSystemService.cs" />
     <Compile Include="Tools\PosixUtils.cs" />

@@ -1,4 +1,5 @@
 ﻿using System;
+using RobotSharp.Camera;
 using RobotSharp.Pi2Go.Gpio;
 using RobotSharp.Pi2Go.Tools;
 using RobotSharp.Robot;
@@ -18,7 +19,7 @@ namespace RobotSharp.WebSocketServer
             var robot = RobotBuilder.BuildPi2GoLite(operatingSystemService, gpioPort);
             robot.Setup();
 
-            using (new Pi2GoWebSocketServer(robot, 81, Console.Out))
+            using (new Pi2GoWebSocketServer(robot, 81, new ImageCapture(), Console.Out))
             {
                 Console.WriteLine("Server started");
                 Console.WriteLine("Press any key to quit.");

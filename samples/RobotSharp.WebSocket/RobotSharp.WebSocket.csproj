@@ -48,7 +48,8 @@
     <Compile Include="Protocol\Operation.cs" />
     <Compile Include="Server\Pi2GoLiteState.cs" />
     <Compile Include="Server\Pi2GoWebSocketServer.cs" />
-    <Compile Include="Server\WebSocketMessageReceiver.cs" />
+    <Compile Include="Server\WebSocketImageMessageSender.cs" />
+    <Compile Include="Server\WebSocketOperationMessageReceiver.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\src\RobotSharp\RobotSharp.csproj">

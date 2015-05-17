@@ -41,6 +41,8 @@
     <!-- A reference to the entire .NET Framework is automatically included -->
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Camera\FrameAvalaibleEventArgs.cs" />
+    <Compile Include="Camera\IImageCapture.cs" />
     <Compile Include="Devices\IDevice.cs" />
     <Compile Include="Devices\InfraredSensor.cs" />
     <Compile Include="Devices\Led.cs" />
@@ -63,6 +65,7 @@
     <Compile Include="Tools\ILoopThread.cs" />
     <Compile Include="Tools\IOperatingSystemService.cs" />
     <Compile Include="Tools\ISetupable.cs" />
+    <Compile Include="Utils\Util.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

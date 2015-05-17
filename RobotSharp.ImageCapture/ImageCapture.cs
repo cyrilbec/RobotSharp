@@ -2,7 +2,7 @@
 using System.Diagnostics;
 using System.IO;
 using System.Threading;
-using RobotSharp.Images;
+using RobotSharp.Camera;
 using RobotSharp.Pi2Go.Tools;
 
 namespace RobotSharp.ImageCapture
