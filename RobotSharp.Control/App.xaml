@@ -1,0 +1,24 @@
+﻿<Application
+    x:Class="RobotSharp.Control.App"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:RobotSharp.Control"
+    RequestedTheme="Light">
+
+    <Application.Resources>
+        
+        <local:ViewModelLocator x:Key="ViewModelLocator"/>
+        
+        <DataTemplate x:Key="UserDetailsDataTemplate">
+            <Border BorderBrush="Black" BorderThickness="5">
+                <Grid HorizontalAlignment="Stretch" Margin="0">
+                    <TextBlock Text="{Binding Firstname}" Foreground="Black"></TextBlock>
+                </Grid>
+            </Border>
+        </DataTemplate>
+        
+        
+        
+    </Application.Resources>
+    
+</Application>
